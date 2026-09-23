@@ -111,7 +111,6 @@ Comments in those files show exactly where to change:
 
 Tensorlab path
 --------------
-The three RUNMEs use:
-    /Users/efekarakoca/Documents/MATLAB/tensorlab_2016-03-28
+The three RUNMEs use tensorlab 
 
 Change CFG.tensorlabPath if necessary.
