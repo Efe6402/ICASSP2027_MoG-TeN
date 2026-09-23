@@ -1,0 +1,43 @@
+function [C_true,alpha_true,alpha_l2_before,canon_error] = ...
+    canonicalize_truth( ...
+    C_raw, ...
+    alpha_raw)
+
+    [N,~,R] = size(C_raw);
+    T = size(alpha_raw,1);
+
+    C_true = zeros(N,N,R);
+    alpha_true = zeros(T,R);
+    alpha_l2_before = zeros(R,1);
+
+    for r = 1:R
+
+        s = norm(alpha_raw(:,r),2);
+
+        alpha_l2_before(r) = s;
+
+        if s<=eps
+            error( ...
+                'Ground-truth alpha_%d has zero norm.', ...
+                r);
+        end
+
+        alpha_true(:,r) = ...
+            alpha_raw(:,r)/s;
+
+        C_true(:,:,r) = ...
+            s*C_raw(:,:,r);
+    end
+
+    X1 = reconstruct_tensor( ...
+        C_raw, ...
+        alpha_raw);
+
+    X2 = reconstruct_tensor( ...
+        C_true, ...
+        alpha_true);
+
+    canon_error = ...
+        norm(X1(:)-X2(:)) / ...
+        max(1,norm(X1(:)));
+end
